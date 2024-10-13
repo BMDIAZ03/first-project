@@ -1,0 +1,17 @@
+#Text{
+    width: 400px;
+    height: 20px;
+    
+    
+}
+
+h1{
+    /*color:white;*/
+    text-align: center;
+}
+body{
+    background-image: url(imagen1.jpg);
+    background-size: cover;
+    
+    
+}
