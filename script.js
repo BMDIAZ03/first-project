@@ -1,3 +1,7 @@
+document.addEventListener('DOMContentLoaded', () =>{
+    loadTodos();
+})
+
 function addTodo() {
     const  todoInput= document.getElementById("todoInpunt");
     const todoList= document.getElementById("todoList");
@@ -11,16 +15,18 @@ function addTodo() {
         /*crear el checkbox para ponerlo como realizada */
         const verification = document.createElement('input');
         verification.type = 'checkbox';
-
+        
         const listItemText = document.createElement('span');
-        listItem.textContent = todoText;
+        listItemText.textContent = todoText;
         
 
         /*crear el boton de eliminar*/
         const buttonDelete = document.createElement('button');
         buttonDelete.textContent = 'Eliminar';
+        buttonDelete.classList.add('delete-button');
         buttonDelete.onclick = function () {
             todoList.removeChild(listItem);
+            saveTodos();
         }
 
         
@@ -30,6 +36,7 @@ function addTodo() {
         todoList.appendChild(listItem);
 
         todoInput.value = '';
+        saveTodos();
 
 
     }else{
@@ -37,3 +44,23 @@ function addTodo() {
     }
 }
 
+function saveTodos() {
+    const todoList = document.getElementById('todoList');
+    const todos = todoList.innerHTML;
+    localStorage.setItem('todos',todos);
+}
+
+function loadTodos() {
+    const savedTodos = localStorage.getItem('todos');
+    if (savedTodos) {
+        const todoList = document.getElementById('todoList');
+        todoList.innerHTML = savedTodos;
+        todoList.querySelectorAll('.delete-button').forEach(button => {
+            button.onclick = function() {
+                const listItem = button.parentNode;
+                todoList.removeChild(listItem);
+                saveTodos();
+            };
+        });
+    }
+}
