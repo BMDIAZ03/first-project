@@ -1,17 +1,73 @@
-#Text{
-    width: 400px;
-    height: 20px;
-    
-    
-}
-
-h1{
-    /*color:white;*/
-    text-align: center;
-}
 body{
     background-image: url(imagen1.jpg);
     background-size: cover;
+    justify-content: center;
+    align-items: center;
     
-    
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    margin: 5px 5px ;
+    border-radius: 20px;
+}
+
+
+@media (min-width: 600px) {
+    input[type="text"] {
+        width: 80%;
+        font-size: 18px;
+    }
+}
+
+/* Media query para pantallas aún más grandes */
+@media (min-width: 1200px) {
+    input[type="text"] {
+        width: 80%;
+        font-size: 20px;
+    }
+}
+
+.todo-list {
+    padding: 50px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 16px;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    background: grey;
+    font-size: 16px;
+    padding: 10px;
+    margin: 5px 5px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.delete-button{
+    background: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+button{
+    background: blue;
+    color: white;
+    font-size: 16px;
+    border: none;
+    padding: 10px 10px;
+    border-radius: 20px;
+    cursor: pointer;
 }
