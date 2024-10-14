@@ -43,7 +43,7 @@ ul {
 }
 
 li {
-    background: grey;
+   background: aqua;
     font-size: 16px;
     padding: 10px;
     margin: 5px 5px;
@@ -51,6 +51,7 @@ li {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    
 }
 
 .delete-button{
