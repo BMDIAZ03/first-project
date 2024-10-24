@@ -3,6 +3,8 @@ body{
     background-size: cover;
     justify-content: center;
     align-items: center;
+    height: 100vh;
+    margin: 0;
     
 }
 
@@ -49,19 +51,32 @@ li {
     margin: 5px 5px;
     border-radius: 20px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    
 }
 
-.delete-button{
-    background: red;
+li input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+li span {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.edit-button, .delete-button {
+    background: green;
     color: white;
     border: none;
     padding: 5px 10px;
     border-radius: 10px;
     cursor: pointer;
+    margin-left: 5px;
 }
+
+.delete-button{
+    background: red;
+}
+
 
 button{
     background: blue;
