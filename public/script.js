@@ -16,16 +16,22 @@ async function addList() {
                 },
                 body: JSON.stringify({ text: todoText, completed: false })
             });
-            console.log(`Server response: ${response.status}`);
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`Server responded with ${response.status}: ${errorText}`);
-            }
             const newTodo = await response.json();
             console.log(`New todo added: ${JSON.stringify(newTodo)}`);
             const listItem = document.createElement('li');
             const verification = document.createElement('input');
             verification.type = 'checkbox';
+            verification.checked = newTodo.completed;
+            verification.addEventListener('change', async function () {
+                // Actualiza el estado de la tarea cuando se cambia el checkbox
+                await fetch(`http://localhost:5500/todos/${newTodo.id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    },
+                    body: JSON.stringify({ text: newTodo.text, completed: this.checked })
+                });
+            });
             const listItemText = document.createElement('span');
             listItemText.textContent = newTodo.text;
 
@@ -91,12 +97,8 @@ async function editList(id, listItemText) {
                 headers: {
                     'Content-Type': 'application/json; charset=UTF-8'
                 },
-                body: JSON.stringify({ text: newText })
+                body: JSON.stringify({ text: newText,completed: false})
             });
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`Server responded with ${response.status}: ${errorText}`);
-            }
             listItemText.textContent = newText;
         } catch (error) {
             console.error(`Error al editar la tarea: ${error.message}`);
@@ -111,42 +113,49 @@ async function loadList() {
         if (!response.ok) throw new Error(`Server responded with ${response.status}: ${response.statusText}`);
         const todos = await response.json();
         const todoList = document.getElementById('todoList');
+        todoList.innerHTML = '';  // Limpia la lista antes de cargar los datos
         todos.forEach(todo => {
             const listItem = document.createElement('li');
             const verification = document.createElement('input');
             verification.type = 'checkbox';
-            verification.checked = todo.Completed;
+            verification.checked = todo.Completed;  // Asegúrate de que se usa la propiedad correcta
+            verification.addEventListener('change', async function () {
+                // Actualiza el estado de la tarea cuando se cambia el checkbox
+                try {
+                    const response = await fetch(`http://localhost:5500/todos/${todo.Id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json; charset=UTF-8'
+                        },
+                        body: JSON.stringify({ text: todo.TaskText, completed: this.checked })
+                    });
+                    if (!response.ok) throw new Error(`Server responded with ${response.status}: ${response.statusText}`);
+                } catch (error) {
+                    console.error(`Error al actualizar el estado de la tarea: ${error.message}`);
+                    alert(`No se pudo actualizar el estado de la tarea: ${error.message}`);
+                }
+            });
             const listItemText = document.createElement('span');
-            listItemText.textContent = todo.Text;
-
-            // Crear el contenedor para los botones
+            listItemText.textContent = todo.TaskText;  // Asegúrate de que se usa la propiedad correcta
             const buttonContainer = document.createElement('div');
             buttonContainer.classList.add('task-buttons');
-
-            // Boton de eliminar
             const buttonDelete = document.createElement('button');
             buttonDelete.textContent = 'Eliminar';
             buttonDelete.classList.add('delete-button');
             buttonDelete.onclick = function() {
                 deleteList(todo.Id, listItem);
             };
-
-            // boton de editar 
             const buttonEdit = document.createElement('button');
             buttonEdit.textContent = 'Editar';
             buttonEdit.classList.add('edit-button');
             buttonEdit.onclick = function() {
                 editList(todo.Id, listItemText);
             };
-
-            // Añadir botones al contenedor
             buttonContainer.appendChild(buttonEdit);
             buttonContainer.appendChild(buttonDelete);
-
             listItem.appendChild(verification);
             listItem.appendChild(listItemText);
-            listItem.appendChild(buttonEdit);
-            listItem.appendChild(buttonDelete);
+            listItem.appendChild(buttonContainer);
             todoList.appendChild(listItem);
         });
     } catch (error) {
